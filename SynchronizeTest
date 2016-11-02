@@ -1,0 +1,56 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class SynchronizeTest implements Runnable {
+	private int i = 0;
+	
+	private String name;
+	public SynchronizeTest(String name) {
+		this.name = name;
+	}
+
+	public void run() {
+		/*synchronized (this) {*/           //如果加上互斥锁，就不会共享i
+			System.out.println(Thread.currentThread().getName());
+
+			while (i % 2 == 0) {
+				++i;
+				++i;
+				++i;
+				++i;
+				if (i > 11000) {
+					System.out.println(Thread.currentThread().getName()
+							+ " i > 11000");
+					return;
+				}
+			}
+			System.out.println(Thread.currentThread().getName() + " i = " + i);
+//		}
+		// System.out.println(Thread.currentThread().getName() );
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		SynchronizeTest st1 = new SynchronizeTest("t1");
+		Thread t1 = new Thread(st1, "st1");
+		Thread t2 = new Thread(st1, "st2");
+		Thread t3 = new Thread(st1, "st3");
+		Thread t4 = new Thread(st1, "st4");
+		Thread t5 = new Thread(st1, "st5");
+		Thread t6 = new Thread(st1, "st6");
+
+		t1.start();
+		// Thread.sleep(100);
+		t2.start();
+		// Thread.sleep(100);
+		t3.start();
+		// Thread.sleep(100);
+		t4.start();
+		// Thread.sleep(100);
+		t5.start();
+		// Thread.sleep(100);
+		t6.start();
+
+	}
+
+}
